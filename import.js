@@ -53,6 +53,11 @@ function defaultErrorHandler(error) {
 var vehicleMapping = {}
 function readFile() {
   var file = files.shift()
+  if (!file) {
+    console.log('done i guess')
+    process.exit()
+    return
+  }
   console.log(file)
   var fileData = []
   var sharedDb = null
