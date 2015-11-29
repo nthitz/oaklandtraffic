@@ -1,0 +1,21 @@
+{
+  "name": "oaklandtraffic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nthitz/oaklandtraffic.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nthitz/oaklandtraffic/issues"
+  },
+  "homepage": "https://github.com/nthitz/oaklandtraffic",
+  "dependencies": {
+    "dotenv": "^1.2.0",
+    "express": "^4.13.3",
+    "pg-promise": "^2.5.5"
+  }
+}
