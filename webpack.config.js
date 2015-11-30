@@ -25,8 +25,6 @@ module.exports = {
           presets: ['es2015', 'react']
         }
       },
-      { test: /\.js$/, exclude: /node_modules|bower_components/, loader: 'babel-loader' },
-      { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel-loader' },
       { test: /\.png$/, loader: "url-loader?limit=100000" },
       { test: /\.jpg$/, loader: "file-loader" },
       {
