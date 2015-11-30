@@ -123,7 +123,7 @@ function readFile() {
           `INSERT INTO sighting (vrm_id, location, time)
             VALUES ($1,
               ST_SetSRID(ST_MakePoint(
-                ${sighting.latitude}, ${sighting.longitude}
+                ${sighting.longitude}, ${sighting.latitude}
               ), 4326),
               $2)
             RETURNING id
