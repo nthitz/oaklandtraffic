@@ -16,6 +16,7 @@ initMap()
 function initMap() {
   let d3map = d3.select('#map')
   let mapHeight = 600
+  d3.select('#list').style('height', `${mapHeight}px`)
   d3map.style('height', mapHeight + 'px')
   map = L.map('map').setView([37.8089782, -122.2544253], 14)
   L.tileLayer('http://tile.stamen.com/toner/{z}/{x}/{y}.png')
@@ -56,6 +57,7 @@ function loadVehicleData(error, _vehicleData) {
   markers.forEach((marker) => {
     map.removeLayer(marker)
   })
+  markers.length = 0
 
   var colorInterpolator = d3.interpolateHsl(
     'hsl(0, 80%, 50%)', 'hsl(180, 80%, 50%)'
@@ -64,8 +66,6 @@ function loadVehicleData(error, _vehicleData) {
     .domain([0, vehicleData.length])
     .range(['hsl(0, 80%, 50%)', 'hsl(360, 80%, 50%)'])
   vehicleData.forEach((sighting, index) => {
-    console.log(index)
-    console.log(colorInterpolator(index / vehicleData.length))
     let marker = L.circle([sighting.lat, sighting.long], 50, {
 
       color: colorInterpolator(index / vehicleData.length),
@@ -74,4 +74,25 @@ function loadVehicleData(error, _vehicleData) {
     map.addLayer(marker)
   })
 
+  let list = d3.select('#list').selectAll('li').data(vehicleData)
+  list.enter().append('li')
+  list.exit().remove()
+  list.text((sighting) => {
+    return sighting.time
+  })
+  list.on('mouseover', mouseoverLI)
+    .on('mouseout', mouseoutLI)
+
+  function mouseoverLI(d, i) {
+    markers.forEach((marker, markerIndex) => {
+      marker.setStyle({ opacity: i === markerIndex ? 1 : 0.1 })
+    })
+
+    map.panTo(markers[i].getLatLng())
+  }
+  function mouseoutLI(d, i) {
+    markers.forEach((marker, markerIndex) => {
+      marker.setStyle({ opacity: 0.5 })
+    })
+  }
 }
