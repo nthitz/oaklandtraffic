@@ -17,10 +17,36 @@ if (!isProduction) {
 }
 
 app.get('/vehicles', (request, response) => {
-  db.many('SELECT * FROM vehicle WHERE number_sightings > 100 ORDER BY number_sightings DESC')
+  db.many('SELECT * FROM vehicle WHERE number_sightings < 20 ORDER BY number_sightings DESC LIMIT 50')
     .then((result) => {
       response.json(result)
     })
+})
+
+app.get('/vehicle/:id', (request, response) => {
+  db.many(
+    `SELECT time, ST_AsText(location) as location
+    FROM sighting WHERE vrm_id=$1`,
+    [request.params.id]
+  ).then((result) => {
+    response.json(result.map((sighting) => {
+      var o = {
+        time: sighting.time,
+      }
+      var location = sighting.location
+      var locationRE = /POINT\((-?[0-9.]+) (-?[0-9.]+)\)/
+
+      var matches = location.match(locationRE)
+      if (! matches) {
+        console.error('invalid location')
+        throw new Error('invalid location')
+        return
+      }
+      o.long = +matches[1]
+      o.lat = +matches[2]
+      return o
+    }))
+  }).catch((error) => { console.log(error) })
 })
 
 var server = app.listen(3000, function () {
